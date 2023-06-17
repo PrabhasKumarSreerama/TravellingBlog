@@ -1,39 +1,17 @@
-import React, { useCallback, useReducer } from "react";
-import "./NewPlaces.css";
+import React from "react";
+
 import Input from "../../shared/components/FormElements/Input";
-import {
-  VALIDATOR_MINLENGTH,
-  VALIDATOR_REQUIRE,
-} from "../../shared/util/validators";
 import Button from "../../shared/components/FormElements/Button";
+import {
+  VALIDATOR_REQUIRE,
+  VALIDATOR_MINLENGTH,
+} from "../../shared/util/validators";
+import { useForm } from "../../shared/hooks/form-hook";
+import "./PlaceForm.css";
 
-const formReducer = (state, action) => {
-  switch (action.type) {
-    case "INPUT_CHANGE":
-      let formIsValid = true;
-      for (const inputId in state.inputs) {
-        if (inputId === action.inputId) {
-          formIsValid = formIsValid && action.isValid;
-        } else {
-          formIsValid = formIsValid && state.inputs[inputId].isValid;
-        }
-      }
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          [action.inputId]: { value: action.value, isValid: action.isValid },
-        },
-        isValid: formIsValid,
-      };
-    default:
-      return state;
-  }
-};
-
-const NewPlaces = () => {
-  const [formState, dispatch] = useReducer(formReducer, {
-    inputs: {
+const NewPlace = () => {
+  const [formState, inputHandler] = useForm(
+    {
       title: {
         value: "",
         isValid: false,
@@ -42,23 +20,19 @@ const NewPlaces = () => {
         value: "",
         isValid: false,
       },
+      address: {
+        value: "",
+        isValid: false,
+      },
     },
-    isValid: false,
-  });
-  const inputHandler = useCallback((id, value, isValid) => {
-    dispatch({
-      type: "INPUT_CHANGE",
-      value: value,
-      isValid: isValid,
-      inputId: id,
-    });
-  }, []);
+    false
+  );
 
   const placeSubmitHandler = (event) => {
     event.preventDefault();
-    console.log("Hi");
     console.log(formState.inputs);
   };
+
   return (
     <form className="place-form" onSubmit={placeSubmitHandler}>
       <Input
@@ -79,7 +53,7 @@ const NewPlaces = () => {
         onInput={inputHandler}
       />
       <Input
-        id="description"
+        id="address"
         element="input"
         label="Address"
         validators={[VALIDATOR_REQUIRE()]}
@@ -93,4 +67,4 @@ const NewPlaces = () => {
   );
 };
 
-export default NewPlaces;
+export default NewPlace;
