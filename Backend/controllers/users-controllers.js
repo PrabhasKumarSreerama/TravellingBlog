@@ -1,16 +1,7 @@
-const { v4: uuid } = require("uuid");
+// const { v4: uuid } = require("uuid");
 const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
-
-const DUMMY_PLACES = [
-  {
-    id: "u1",
-    name: "Sreerama Prabhas",
-    email: "test@email.com",
-    password: "testers",
-  },
-];
 
 const getUsers = async (req, res, next) => {
   let users;
@@ -33,7 +24,7 @@ const signup = async (req, res, next) => {
       new HttpError("Invalid input passed, please check your data.", 422)
     );
   }
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
   let existingUSer;
   try {
     existingUSer = await User.findOne({ email: email });
@@ -57,7 +48,7 @@ const signup = async (req, res, next) => {
     image:
       "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=2000",
     password,
-    places,
+    places: [],
   });
   try {
     await createdUser.save();
