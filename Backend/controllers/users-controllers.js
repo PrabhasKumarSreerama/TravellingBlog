@@ -64,10 +64,10 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
-  let existingUSer;
+  let existingUser;
 
   try {
-    existingUSer = await User.findOne({ email: email });
+    existingUser = await User.findOne({ email: email });
   } catch (err) {
     const error = new HttpError(
       "Signinig up failed, please try again later.",
@@ -76,7 +76,7 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  if (!existingUSer || existingUSer.password !== password) {
+  if (!existingUser || existingUser.password !== password) {
     const error = new HttpError(
       "Invalid credentials, could not log you in.",
       401
@@ -84,7 +84,10 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ message: "Logged in!" });
+  res.json({
+    message: "Logged in!",
+    user: existingUser.toObject({ getters: true }),
+  });
 };
 
 exports.getUsers = getUsers;
