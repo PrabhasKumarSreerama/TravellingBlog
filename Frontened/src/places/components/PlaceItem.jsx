@@ -30,7 +30,7 @@ const PlaceItem = (props) => {
     setShowConfirmModal(false);
     try {
       await sendRequest(
-        `http://localhost:5000/api/places/${props.id}`,
+        process.env.REACT_APP_BACKEND_URL + `/places/${props.id}`,
         "DELETE",
         null,
         { Authorization: "Bearer " + auth.token }
@@ -51,7 +51,12 @@ const PlaceItem = (props) => {
         footer={<Button onClick={closeMapHandler}>Close</Button>}
       >
         <div className="map-container">
-          <h2>The Map!</h2>
+          <img
+            src="https://th.bing.com/th/id/R.65928da8a7456f4b164cc72dfc4682b2?rik=5P7NvePHWWMykw&riu=http%3a%2f%2fmaps.googleapis.com%2fmaps%2fapi%2fstaticmap%3fcenter%3d59.919148%2c10.751985%26zoom%3d16%26size%3d363x220%26markers%3d59.919148%2c10.751985%26scale%3d2%26key%3dAIzaSyDZyRLAYUoDl27E-kYE5iUYEthxSUTx2t0&ehk=I9OE5A0UC3eC1WU5gTwzRRO53jdLxg5ANbpnUeI04lc%3d&risl=&pid=ImgRaw&r=0"
+            alt="The Map!"
+            height="270"
+            width="620"
+          ></img>
         </div>
       </Modal>
       <Modal
@@ -80,7 +85,7 @@ const PlaceItem = (props) => {
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="place-item__image">
             <img
-              src={`http://localhost:5000/${props.image}`}
+              src={`${process.env.REACT_APP_ASSET_URL}/${props.image}`}
               alt={props.title}
             />
           </div>
